@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Friends Attendance</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo-icon">👥</div>
+                <h1>Attendance</h1>
+                <p class="login-subtitle">Enter your passkey to continue</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="input-group">
+                    <input 
+                        type="password" 
+                        id="passkeyInput" 
+                        placeholder="6-digit passkey" 
+                        maxlength="6" 
+                        inputmode="numeric" 
+                        pattern="[0-9]{6}" 
+                        autocomplete="off"
+                        required
+                    >
+                    <div class="input-border"></div>
+                </div>
+                <p id="loginError" class="error-message hidden">Invalid passkey. Try again.</p>
+                <button type="submit" id="loginBtn" class="btn-primary">Sign In</button>
+            </form>
+            
+            <p class="login-footer">Only friends with a passkey can access</p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="login.js"></script>
+</body>
+</html>

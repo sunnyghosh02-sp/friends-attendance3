@@ -1,0 +1,562 @@
+/* ==============================
+   Friends Attendance System
+   Mobile-first, System Theme
+   ============================== */
+
+/* ---------- CSS Variables ---------- */
+:root {
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --surface-hover: #f0f0f2;
+    --text: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --text-tertiary: #aeaeb2;
+    --border: #d2d2d7;
+    --primary: #0071e3;
+    --primary-hover: #0066cc;
+    --green: #34c759;
+    --green-bg: #e8f8ed;
+    --green-text: #1a7a3a;
+    --red: #ff3b30;
+    --red-bg: #fde8e8;
+    --red-text: #a61d1d;
+    --blue-bg: #e8f0fe;
+    --blue-text: #1a56db;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-elevated: 0 4px 12px rgba(0,0,0,0.1);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+    --transition: 0.2s ease;
+}
+
+/* ---------- Dark Mode (System) ---------- */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #1c1c1e;
+        --surface: #2c2c2e;
+        --surface-hover: #3a3a3c;
+        --text: #f5f5f7;
+        --text-secondary: #a1a1a6;
+        --text-tertiary: #636366;
+        --border: #48484a;
+        --primary: #0a84ff;
+        --primary-hover: #409cff;
+        --green: #30d158;
+        --green-bg: #1a3a2a;
+        --green-text: #30d158;
+        --red: #ff453a;
+        --red-bg: #3a1a1a;
+        --red-text: #ff453a;
+        --blue-bg: #1a2a3a;
+        --blue-text: #0a84ff;
+        --shadow: 0 1px 3px rgba(0,0,0,0.3);
+        --shadow-elevated: 0 4px 12px rgba(0,0,0,0.4);
+    }
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Layout ---------- */
+.page {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px;
+    min-height: 100vh;
+}
+
+/* ---------- Login Card ---------- */
+.login-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+}
+
+.login-header {
+    margin-bottom: 32px;
+}
+
+.logo-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.login-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+}
+
+.login-subtitle {
+    color: var(--text-secondary);
+    font-size: 15px;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 320px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+#passkeyInput {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 24px;
+    letter-spacing: 10px;
+    text-align: center;
+    font-weight: 600;
+    background: var(--surface);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    font-family: var(--font);
+}
+
+#passkeyInput:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.15);
+}
+
+#passkeyInput::placeholder {
+    color: var(--text-tertiary);
+    font-size: 16px;
+    letter-spacing: 2px;
+    font-weight: 400;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition), transform 0.1s;
+    font-family: var(--font);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.error-message {
+    color: var(--red);
+    font-size: 13px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.login-footer {
+    margin-top: 32px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+/* ---------- Dashboard ---------- */
+.dashboard {
+    padding-top: 4px;
+}
+
+/* Header */
+.dash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0 16px;
+}
+
+.dash-header-left h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.dash-header-left .date-display {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.btn-logout {
+    padding: 6px 14px;
+    background: transparent;
+    color: var(--red);
+    border: 1px solid var(--red);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition);
+    font-family: var(--font);
+    flex-shrink: 0;
+}
+
+.btn-logout:hover {
+    background: var(--red);
+    color: white;
+}
+
+/* Welcome Banner */
+.welcome-banner {
+    background: var(--primary);
+    color: white;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    text-align: center;
+    animation: slideDown 0.4s ease-out;
+}
+
+.welcome-banner h2 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Card ---------- */
+.card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+}
+
+.card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    letter-spacing: -0.2px;
+}
+
+/* Count Grid */
+.count-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.count-box {
+    text-align: center;
+    padding: 14px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.count-box.coming {
+    background: var(--green-bg);
+}
+
+.count-box.not-coming {
+    background: var(--red-bg);
+}
+
+.count-box.total {
+    background: var(--blue-bg);
+}
+
+.count-number {
+    display: block;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.count-box.coming .count-number { color: var(--green-text); }
+.count-box.not-coming .count-number { color: var(--red-text); }
+.count-box.total .count-number { color: var(--blue-text); }
+
+.count-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Session Tag */
+.session-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.session-tag.active {
+    background: var(--green-bg);
+    color: var(--green-text);
+}
+
+.session-tag.closed {
+    background: var(--red-bg);
+    color: var(--red-text);
+}
+
+.session-tag.upcoming {
+    background: var(--blue-bg);
+    color: var(--blue-text);
+}
+
+/* Vote Buttons */
+.vote-section {
+    margin-bottom: 12px;
+}
+
+.vote-question {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.vote-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-vote {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    font-family: var(--font);
+}
+
+.btn-vote:active {
+    transform: scale(0.97);
+}
+
+.btn-yes {
+    background: var(--green);
+    color: white;
+}
+
+.btn-no {
+    background: var(--red);
+    color: white;
+}
+
+.voted-status {
+    text-align: center;
+    padding: 4px 0;
+}
+
+.voted-status p {
+    font-size: 15px;
+    color: var(--text-secondary);
+}
+
+.voted-status .status-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 6px;
+}
+
+.status-badge.coming {
+    background: var(--green-bg);
+    color: var(--green-text);
+}
+
+.status-badge.not-coming {
+    background: var(--red-bg);
+    color: var(--red-text);
+}
+
+.btn-change {
+    display: block;
+    margin: 10px auto 0;
+    padding: 6px 16px;
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: background var(--transition);
+}
+
+.btn-change:hover {
+    background: var(--surface-hover);
+}
+
+/* Session Info */
+.session-info {
+    background: var(--blue-bg);
+    color: var(--blue-text);
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+/* Responses List */
+.response-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.response-item:last-child {
+    border-bottom: none;
+}
+
+.response-name {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.response-status {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 12px;
+    border-radius: 20px;
+}
+
+.response-status.coming {
+    background: var(--green-bg);
+    color: var(--green-text);
+}
+
+.response-status.not-coming {
+    background: var(--red-bg);
+    color: var(--red-text);
+}
+
+.text-muted {
+    color: var(--text-tertiary);
+    font-size: 14px;
+    text-align: center;
+    padding: 12px 0;
+}
+
+/* ---------- History Section ---------- */
+.history-section {
+    margin-top: 20px;
+    padding-bottom: 24px;
+}
+
+.history-section .section-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: -0.2px;
+}
+
+.history-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    box-shadow: var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-date {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.history-day {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    font-weight: 400;
+    margin-left: 6px;
+}
+
+.history-stats {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.history-stat {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.history-stat.yes {
+    color: var(--green-text);
+}
+
+.history-stat.no {
+    color: var(--red-text);
+}
+
+.history-stat.total {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.history-empty {
+    text-align: center;
+    padding: 24px 0;
+    color: var(--text-tertiary);
+    font-size: 14px;
+}
+
+/* ---------- Utilities ---------- */
+.hidden {
+    display: none !important;
+}
