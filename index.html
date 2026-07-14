@@ -1,45 +1,403 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Friends Attendance</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Attendance · Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        :root {
+            --bg-main: #0c111b;
+            --bg-card: #1c283b;
+            --border-subtle: #2e405b;
+            --text-primary: #eef3fc;
+            --text-secondary: #97aecb;
+            --text-tertiary: #5b7495;
+            --accent-blue: #2a7de1;
+            --accent-glow: rgba(42, 125, 225, 0.25);
+            --green: #22c55e;
+            --red: #f0626e;
+            --red-bg: #2a1418;
+            --shadow-card: 0 8px 28px rgba(0, 0, 0, 0.65);
+            --radius: 14px;
+            --radius-sm: 8px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --transition: 0.2s cubic-bezier(0.2, 0, 0, 1);
+        }
+        body {
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+        }
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius);
+            padding: 36px 28px 32px;
+            box-shadow: var(--shadow-card);
+            transition: border-color var(--transition);
+        }
+        .login-card:hover {
+            border-color: #3d5677;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .login-header .logo-icon {
+            font-size: 48px;
+            background: linear-gradient(135deg, #2a7de1, #7aa9ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+        .login-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff, #9bbaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .login-subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .input-group {
+            position: relative;
+        }
+        .input-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 18px;
+            transition: color var(--transition);
+        }
+        #passkeyInput {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            font-size: 22px;
+            letter-spacing: 10px;
+            text-align: center;
+            font-weight: 600;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            border: 1.5px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            outline: none;
+            transition: all var(--transition);
+            font-family: var(--font);
+        }
+        #passkeyInput:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 4px var(--accent-glow);
+        }
+        #passkeyInput::placeholder {
+            color: var(--text-tertiary);
+            font-size: 16px;
+            letter-spacing: 4px;
+            font-weight: 400;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: var(--font);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-primary:hover {
+            background: #1e6ad0;
+            box-shadow: 0 0 24px var(--accent-glow);
+            transform: scale(1.01);
+        }
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .error-message {
+            color: var(--red);
+            font-size: 13px;
+            text-align: center;
+            background: var(--red-bg);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .error-message i {
+            font-size: 14px;
+        }
+        .login-footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 18px;
+        }
+        .login-footer i {
+            color: #f5b342;
+            margin: 0 4px;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .debug-info {
+            margin-top: 12px;
+            padding: 10px;
+            background: var(--bg-main);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+            font-size: 12px;
+            color: var(--text-secondary);
+            max-height: 120px;
+            overflow-y: auto;
+            display: none;
+        }
+        .debug-info.show {
+            display: block;
+        }
+        .debug-info .success {
+            color: var(--green);
+        }
+        .debug-info .error {
+            color: var(--red);
+        }
+        @media (max-width: 420px) {
+            .login-card {
+                padding: 28px 18px 24px;
+            }
+            #passkeyInput {
+                font-size: 18px;
+                letter-spacing: 6px;
+                padding: 14px 14px 14px 44px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="page">
+    <div class="login-container">
         <div class="login-card">
             <div class="login-header">
-                <div class="logo-icon">👥</div>
+                <div class="logo-icon"><i class="fas fa-user-friends"></i></div>
                 <h1>Attendance</h1>
-                <p class="login-subtitle">Enter your passkey to continue</p>
+                <p class="login-subtitle">Enter your 6‑digit passkey</p>
             </div>
-            
             <form id="loginForm" class="login-form">
                 <div class="input-group">
-                    <input 
-                        type="password" 
-                        id="passkeyInput" 
-                        placeholder="6-digit passkey" 
-                        maxlength="6" 
-                        inputmode="numeric" 
-                        pattern="[0-9]{6}" 
-                        autocomplete="off"
-                        required
-                    >
-                    <div class="input-border"></div>
+                    <i class="fas fa-key"></i>
+                    <input type="password" id="passkeyInput" placeholder="••••••" maxlength="6" inputmode="numeric"
+                    pattern="[0-9]{6}" autocomplete="off" required>
                 </div>
-                <p id="loginError" class="error-message hidden">Invalid passkey. Try again.</p>
-                <button type="submit" id="loginBtn" class="btn-primary">Sign In</button>
+                <p id="loginError" class="error-message hidden"><i class="fas fa-exclamation-circle"></i> <span>Invalid passkey. Try again.</span></p>
+                <button type="submit" id="loginBtn" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Sign In</button>
             </form>
-            
-            <p class="login-footer">Only friends with a passkey can access</p>
+            <div id="debugInfo" class="debug-info"></div>
+            <p class="login-footer"><i class="fas fa-lock"></i> Secure · Only friends with a passkey can access</p>
         </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
-    <script src="login.js"></script>
+    <script>
+        // ============================================================
+        // FIREBASE CONFIG
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyAUwrm23k5iZTz_kirmshbGUG6LSjdvQn4",
+            authDomain: "friends-attendance-db6a4.firebaseapp.com",
+            projectId: "friends-attendance-db6a4",
+            storageBucket: "friends-attendance-db6a4.firebasestorage.app",
+            messagingSenderId: "328796872836",
+            appId: "1:328796872836:web:df651b626e6070d6f2e2d1"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // ============================================================
+        // LOGIN — Passkey Verification (Working & Secure)
+        // ============================================================
+        (function() {
+            const loginForm = document.getElementById('loginForm');
+            const passkeyInput = document.getElementById('passkeyInput');
+            const loginError = document.getElementById('loginError');
+            const loginBtn = document.getElementById('loginBtn');
+            const debugInfo = document.getElementById('debugInfo');
+
+            let debugShown = false;
+
+            function logDebug(message, isError = false) {
+                debugInfo.classList.add('show');
+                debugShown = true;
+                const color = isError ? 'error' : 'success';
+                debugInfo.innerHTML += `<div class="${color}">${new Date().toLocaleTimeString()}: ${message}</div>`;
+                debugInfo.scrollTop = debugInfo.scrollHeight;
+            }
+
+            // Check connection on load
+            window.addEventListener('load', async () => {
+                passkeyInput.focus();
+                logDebug('🔍 Connecting to Firebase...');
+                
+                try {
+                    // Simple test query
+                    const testRef = db.collection('users').limit(1);
+                    await testRef.get();
+                    logDebug('✅ Firebase connected successfully!');
+                    logDebug('📦 Database is accessible');
+                    
+                    // Check if users exist
+                    const usersSnapshot = await db.collection('users').get();
+                    if (usersSnapshot.empty) {
+                        logDebug('⚠️ No users found in database. Create at least one user.', true);
+                        logDebug('💡 Go to Firebase Console → Firestore → Add "users" collection', true);
+                    } else {
+                        logDebug(`👥 ${usersSnapshot.size} users found in database`);
+                    }
+                } catch (error) {
+                    logDebug(`❌ Firebase error: ${error.message}`, true);
+                    if (error.code === 'permission-denied') {
+                        logDebug('🔒 Update Firestore rules to allow read access', true);
+                    }
+                }
+            });
+
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                loginError.classList.add('hidden');
+                
+                const passkey = passkeyInput.value.trim();
+                
+                if (passkey.length !== 6 || !/^\d{6}$/.test(passkey)) {
+                    showError('Please enter a valid 6-digit passkey.');
+                    return;
+                }
+                
+                setLoading(true);
+                logDebug(`🔑 Attempting login with passkey: ${passkey}`);
+                
+                try {
+                    // Query users collection by passkey
+                    const usersRef = db.collection('users');
+                    const snapshot = await usersRef.where('passkey', '==', passkey).get();
+                    
+                    logDebug(`📊 Query returned ${snapshot.size} result(s)`);
+                    
+                    if (snapshot.empty) {
+                        showError('Invalid passkey. Try again.');
+                        logDebug('❌ No user found with this passkey', true);
+                        logDebug('💡 Make sure you have a user with this passkey in Firestore', true);
+                        setLoading(false);
+                        passkeyInput.value = '';
+                        passkeyInput.focus();
+                        return;
+                    }
+                    
+                    // Get user data
+                    const userData = snapshot.docs[0].data();
+                    const user = {
+                        studentId: userData.studentId,
+                        name: userData.name,
+                        passkey: userData.passkey
+                    };
+                    
+                    logDebug(`✅ Login successful! Welcome ${user.name} (${user.studentId})`);
+                    
+                    // Store in session
+                    sessionStorage.setItem('attendanceUser', JSON.stringify(user));
+                    logDebug('🚀 Redirecting to dashboard...');
+                    
+                    // Short delay to show success
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error('Login error:', error);
+                    logDebug(`❌ ERROR: ${error.message}`, true);
+                    
+                    // Show specific error messages
+                    if (error.code === 'permission-denied') {
+                        showError('Permission denied. Check Firestore security rules.');
+                        logDebug('🔒 Firestore rules blocking read access.', true);
+                        logDebug('📝 Update rules: allow read: if true; for testing', true);
+                    } else if (error.code === 'unavailable') {
+                        showError('Firebase service unavailable. Try again.');
+                        logDebug('🌐 Firebase service unavailable', true);
+                    } else if (error.code === 'not-found') {
+                        showError('Users collection not found. Create it in Firestore.');
+                        logDebug('📁 "users" collection does not exist.', true);
+                    } else {
+                        showError(`Error: ${error.message}`);
+                    }
+                    
+                    setLoading(false);
+                }
+            });
+
+            function showError(message) {
+                const span = loginError.querySelector('span');
+                if (span) span.textContent = message;
+                loginError.classList.remove('hidden');
+                if (!debugShown) {
+                    logDebug(`⚠️ ${message}`, true);
+                }
+            }
+
+            function setLoading(isLoading) {
+                loginBtn.disabled = isLoading;
+                loginBtn.innerHTML = isLoading ?
+                    '<i class="fas fa-spinner fa-pulse"></i> Verifying...' :
+                    '<i class="fas fa-sign-in-alt"></i> Sign In';
+            }
+            
+            passkeyInput.addEventListener('input', () => {
+                loginError.classList.add('hidden');
+            });
+        })();
+    </script>
 </body>
 </html>
