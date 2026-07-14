@@ -1,96 +1,1098 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Dashboard — Attendance</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Pro · Attendance &amp; Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ----- GLOBAL RESET & VARIABLES ----- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-main: #0c111b;
+            --bg-surface: #151e2c;
+            --bg-card: #1c283b;
+            --bg-card-hover: #25344b;
+            --border-subtle: #2e405b;
+            --text-primary: #eef3fc;
+            --text-secondary: #97aecb;
+            --text-tertiary: #5b7495;
+            --accent-blue: #2a7de1;
+            --accent-glow: rgba(42, 125, 225, 0.25);
+            --green: #22c55e;
+            --green-bg: #0f2a1a;
+            --red: #f0626e;
+            --red-bg: #2a1418;
+            --gold: #f5b342;
+            --shadow-card: 0 8px 28px rgba(0, 0, 0, 0.65);
+            --radius: 14px;
+            --radius-sm: 8px;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --transition: 0.2s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app {
+            max-width: 820px;
+            width: 100%;
+            padding-bottom: 40px;
+        }
+
+        /* ----- CARDS ----- */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius);
+            padding: 20px 18px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-card);
+            transition: border var(--transition), background var(--transition);
+        }
+        .card:hover {
+            border-color: #3d5677;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title i {
+            color: var(--accent-blue);
+        }
+
+        /* ----- TOP BAR ----- */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .topbar-left h1 {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            background: linear-gradient(135deg, #fff, #8bb3ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .topbar-left .sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .topbar-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font);
+        }
+        .btn-outline:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+            background: rgba(42, 125, 225, 0.06);
+        }
+        .btn-outline.danger:hover {
+            border-color: var(--red);
+            color: var(--red);
+            background: var(--red-bg);
+        }
+        .btn-primary {
+            background: var(--accent-blue);
+            border: none;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font);
+        }
+        .btn-primary:hover {
+            background: #1e6ad0;
+            box-shadow: 0 0 24px var(--accent-glow);
+        }
+        .badge-pill {
+            background: var(--bg-main);
+            padding: 4px 12px;
+            border-radius: 30px;
+            border: 1px solid var(--border-subtle);
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* ----- STATS GRID ----- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .stat-item {
+            background: var(--bg-surface);
+            border-radius: var(--radius-sm);
+            padding: 14px 10px;
+            text-align: center;
+            border: 1px solid var(--border-subtle);
+        }
+        .stat-item .num {
+            font-size: 26px;
+            font-weight: 700;
+            display: block;
+            line-height: 1.2;
+        }
+        .stat-item .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            letter-spacing: 0.3px;
+        }
+        .stat-item .num.green {
+            color: var(--green);
+        }
+        .stat-item .num.red {
+            color: var(--red);
+        }
+        .stat-item .num.blue {
+            color: var(--accent-blue);
+        }
+        .stat-item .num.gold {
+            color: var(--gold);
+        }
+
+        /* ----- SESSION TAG ----- */
+        .session-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 16px;
+            border-radius: 40px;
+            background: var(--bg-main);
+            border: 1px solid var(--border-subtle);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .session-tag.active {
+            border-color: var(--green);
+            color: var(--green);
+        }
+        .session-tag.upcoming {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        .session-tag.closed {
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        /* ----- VOTE BUTTONS ----- */
+        .vote-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .btn-vote {
+            flex: 1;
+            min-width: 100px;
+            padding: 14px 10px;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: var(--font);
+        }
+        .btn-vote.yes {
+            border-color: var(--green);
+            color: var(--green);
+        }
+        .btn-vote.yes:hover {
+            background: var(--green-bg);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.12);
+        }
+        .btn-vote.no {
+            border-color: var(--red);
+            color: var(--red);
+        }
+        .btn-vote.no:hover {
+            background: var(--red-bg);
+            box-shadow: 0 0 20px rgba(240, 98, 110, 0.12);
+        }
+        .btn-vote:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ----- RESPONSE ITEMS (highlighted) ----- */
+        .response-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .response-item:last-child {
+            border-bottom: none;
+        }
+        .response-name {
+            font-weight: 500;
+            font-size: 15px;
+        }
+        .response-status {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 0.3px;
+        }
+        .response-status.coming {
+            background: var(--green-bg);
+            color: var(--green);
+            border: 1px solid var(--green);
+        }
+        .response-status.not-coming {
+            background: var(--red-bg);
+            color: var(--red);
+            border: 1px solid var(--red);
+        }
+
+        /* ----- FRIEND LIST ----- */
+        .friend-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .friend-item:last-child {
+            border-bottom: none;
+        }
+        .friend-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .friend-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .friend-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .friend-status {
+            font-size: 11px;
+            padding: 3px 12px;
+            border-radius: 30px;
+            border: 1px solid var(--border-subtle);
+            font-weight: 500;
+        }
+        .friend-status.online {
+            border-color: var(--green);
+            color: var(--green);
+            background: var(--green-bg);
+        }
+        .friend-status.offline {
+            color: var(--text-tertiary);
+            border-color: var(--border-subtle);
+        }
+
+        /* ----- CHAT ----- */
+        .chat-box {
+            background: var(--bg-surface);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            max-height: 300px;
+            min-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .chat-msg {
+            padding: 8px 14px;
+            border-radius: 18px;
+            max-width: 80%;
+            font-size: 14px;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+        .chat-msg.me {
+            background: var(--accent-blue);
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-msg.other {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .chat-msg .msg-name {
+            font-weight: 600;
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 2px;
+        }
+        .chat-msg .msg-text {
+            font-size: 14px;
+        }
+        .chat-msg .msg-time {
+            font-size: 10px;
+            opacity: 0.6;
+            margin-top: 4px;
+            text-align: right;
+        }
+        .chat-input-row {
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input-row input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 40px;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font);
+            font-size: 14px;
+            outline: none;
+            transition: border var(--transition);
+        }
+        .chat-input-row input:focus {
+            border-color: var(--accent-blue);
+        }
+        .chat-input-row input::placeholder {
+            color: var(--text-tertiary);
+        }
+        .chat-input-row button {
+            padding: 12px 22px;
+            border-radius: 40px;
+            border: none;
+            background: var(--accent-blue);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: var(--font);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chat-input-row button:hover {
+            background: #1e6ad0;
+        }
+
+        /* ----- PROFILE MODAL ----- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            padding: 20px;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: var(--shadow-card);
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 18px;
+            background: transparent;
+            border: none;
+            color: var(--text-tertiary);
+            font-size: 22px;
+            cursor: pointer;
+        }
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+        .modal h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .modal .field {
+            margin-bottom: 16px;
+        }
+        .modal .field label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            letter-spacing: 0.4px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .modal .field .value {
+            background: var(--bg-main);
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+            font-size: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal .field .value span {
+            color: var(--text-secondary);
+        }
+        .modal .field .value i {
+            color: var(--text-tertiary);
+        }
+
+        .history-mini {
+            max-height: 140px;
+            overflow-y: auto;
+            margin-top: 8px;
+        }
+        .history-mini .h-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-subtle);
+            font-size: 13px;
+        }
+        .history-mini .h-status {
+            font-weight: 600;
+        }
+        .h-status.yes {
+            color: var(--green);
+        }
+        .h-status.no {
+            color: var(--red);
+        }
+
+        /* ----- UTILITIES ----- */
+        .hidden {
+            display: none !important;
+        }
+        .text-muted {
+            color: var(--text-tertiary);
+        }
+        .text-center {
+            text-align: center;
+        }
+
+        /* ----- RESPONSIVE ----- */
+        @media (max-width: 540px) {
+            .topbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .topbar-right {
+                justify-content: flex-start;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .vote-group {
+                flex-direction: column;
+            }
+            .btn-vote {
+                min-width: unset;
+            }
+            .chat-box {
+                max-height: 220px;
+                min-height: 150px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="page">
-        
-        <!-- Welcome Banner (auto-hides after 2s) -->
-        <div id="welcomeBanner" class="welcome-banner hidden">
-            <h2>👋 Welcome back, <span id="welcomeName"></span>!</h2>
+<div class="app" id="app">
+
+    <!-- ===== TOP BAR ===== -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <h1><i class="fas fa-users-cog" style="color:var(--accent-blue);margin-right:8px;"></i>Attendance Hub</h1>
+            <div class="sub"><span id="dashDateLabel">Loading...</span> · <span id="sessionLabel" class="session-tag active">● ACTIVE</span></div>
         </div>
-        
-        <div class="dashboard">
-            
-            <!-- Header -->
-            <div class="dash-header">
-                <div class="dash-header-left">
-                    <h1 id="dashTitle">Today</h1>
-                    <p id="dashDate" class="date-display">Loading...</p>
-                    <p style="font-size:12px; color:var(--text-tertiary); margin-top:2px;">
-                        <span id="dashUserName"></span> · <span id="dashStudentId"></span>
-                    </p>
-                </div>
-                <button id="logoutBtn" class="btn-logout">Logout</button>
-            </div>
-            
-            <!-- Session Info Banner (visible after 11am) -->
-            <div id="sessionInfo" class="session-info hidden">
-                🕐 Today's session closed at 11:00 AM. You are now voting for tomorrow.
-            </div>
-            
-            <!-- Live Count -->
-            <div class="card">
-                <span id="sessionTag" class="session-tag active">● ACTIVE</span>
-                <div class="card-title">Live Count</div>
-                <div class="count-grid">
-                    <div class="count-box coming">
-                        <span class="count-number" id="yesCount">0</span>
-                        <span class="count-label">Coming</span>
-                    </div>
-                    <div class="count-box not-coming">
-                        <span class="count-number" id="noCount">0</span>
-                        <span class="count-label">Not Coming</span>
-                    </div>
-                    <div class="count-box total">
-                        <span class="count-number" id="totalCount">0</span>
-                        <span class="count-label">Responded</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Vote Section -->
-            <div id="voteSection" class="card vote-section">
-                <p class="vote-question" id="voteQuestion">Will you come today?</p>
-                
-                <div id="voteButtons" class="vote-buttons">
-                    <button id="voteYesBtn" class="btn-vote btn-yes">✅ Yes</button>
-                    <button id="voteNoBtn" class="btn-vote btn-no">❌ No</button>
-                </div>
-                
-                <div id="votedStatus" class="voted-status hidden">
-                    <p>You voted:</p>
-                    <span id="votedBadge" class="status-badge coming">Coming</span>
-                    <button id="changeVoteBtn" class="btn-change hidden">Change Vote</button>
-                </div>
-            </div>
-            
-            <!-- Everyone's Responses -->
-            <div class="card">
-                <div class="card-title">Who's Responded</div>
-                <div id="responsesList">
-                    <p class="text-muted">No responses yet.</p>
-                </div>
-            </div>
-            
-            <!-- Last 7 Days History -->
-            <div class="history-section">
-                <div class="section-title">📅 Last 7 Days</div>
-                <div id="historyContainer">
-                    <p class="text-muted">Loading...</p>
-                </div>
-            </div>
-            
+        <div class="topbar-right">
+            <button class="btn-outline" id="profileBtn"><i class="fas fa-user-circle"></i> Profile</button>
+            <button class="btn-outline danger" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
-    <script src="dashboard.js"></script>
+    <!-- ===== STATS ===== -->
+    <div class="stats-grid">
+        <div class="stat-item"><span class="num green" id="yesCount">0</span><span class="label">Coming</span></div>
+        <div class="stat-item"><span class="num red" id="noCount">0</span><span class="label">Absent</span></div>
+        <div class="stat-item"><span class="num blue" id="totalCount">0</span><span class="label">Responded</span></div>
+        <div class="stat-item"><span class="num gold" id="activeFriendsCount">0</span><span class="label">Active Now</span></div>
+    </div>
+
+    <!-- ===== VOTE SECTION ===== -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title"><i class="fas fa-hand-paper"></i> Your Vote</div>
+            <span id="voteSessionLabel" style="font-size:13px;color:var(--text-secondary);">Today</span>
+        </div>
+        <p id="voteQuestion" style="font-size:17px;font-weight:600;margin-bottom:14px;">Will you come today?</p>
+        <div id="voteButtons" class="vote-group">
+            <button class="btn-vote yes" id="voteYesBtn"><i class="fas fa-thumbs-up"></i> Yes</button>
+            <button class="btn-vote no" id="voteNoBtn"><i class="fas fa-thumbs-down"></i> No</button>
+        </div>
+        <div id="votedStatus" class="hidden" style="margin-top:12px;padding:10px 0;text-align:center;border-top:1px solid var(--border-subtle);">
+            <span style="color:var(--text-secondary);">You voted:</span>
+            <span id="votedBadge" class="badge-pill" style="background:var(--green-bg);color:var(--green);border-color:var(--green);margin-left:8px;">Coming</span>
+            <button id="changeVoteBtn" class="btn-outline" style="margin-left:12px;padding:4px 14px;"><i class="fas fa-undo-alt"></i> Change</button>
+        </div>
+    </div>
+
+    <!-- ===== ALL RESPONSES (Moved UP) ===== -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title"><i class="fas fa-list-ul"></i> All Responses</div>
+            <span id="responseCount" class="badge-pill">0</span>
+        </div>
+        <div id="responsesList"><p class="text-muted text-center" style="padding:8px 0;">No responses yet.</p></div>
+    </div>
+
+    <!-- ===== ACTIVE FRIENDS & CHAT (Moved DOWN) ===== -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title"><i class="fas fa-user-friends"></i> Active Friends &amp; Chat</div>
+            <span id="onlineBadge" class="badge-pill">0 online</span>
+        </div>
+
+        <!-- Friend list -->
+        <div id="friendsList" style="max-height:150px;overflow-y:auto;margin-bottom:12px;border-bottom:1px solid var(--border-subtle);padding-bottom:6px;">
+            <div class="text-muted text-center" style="padding:10px 0;">Loading friends...</div>
+        </div>
+
+        <!-- Chat area (bigger) -->
+        <div class="chat-box" id="chatBox">
+            <div class="text-muted text-center" style="padding:20px 0;">No messages yet</div>
+        </div>
+        <div class="chat-input-row">
+            <input type="text" id="chatInput" placeholder="Type a message..." maxlength="200" />
+            <button id="sendChatBtn"><i class="fas fa-paper-plane"></i> Send</button>
+        </div>
+    </div>
+
+    <!-- ===== PROFILE MODAL ===== -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal">
+            <button class="modal-close" id="closeProfileModal">&times;</button>
+            <h2><i class="fas fa-id-badge" style="color:var(--accent-blue);"></i> My Profile</h2>
+            <div class="field"><label>Name</label><div class="value"><span id="pName">—</span><i class="fas fa-user"></i></div></div>
+            <div class="field"><label>Student ID</label><div class="value"><span id="pId">—</span><i class="fas fa-id-card"></i></div></div>
+            <div class="field"><label>Passkey</label><div class="value"><span id="pPasskey">—</span><i class="fas fa-key"></i></div></div>
+            <div class="field"><label>My Attendance (last 7 days)</label>
+                <div class="history-mini" id="profileHistory"><div class="text-muted text-center" style="padding:6px 0;">Loading...</div></div>
+            </div>
+            <button class="btn-primary" style="width:100%;margin-top:12px;" id="closeProfileBtn"><i class="fas fa-check"></i> Done</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- FIREBASE + CONFIG + ALL SCRIPTS -->
+<!-- ============================================================ -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js">
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js">
+</script>
+<script>
+    // ============================================================
+    // FIREBASE CONFIG
+    // ============================================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyAUwrm23k5iZTz_kirmshbGUG6LSjdvQn4",
+        authDomain: "friends-attendance-db6a4.firebaseapp.com",
+        projectId: "friends-attendance-db6a4",
+        storageBucket: "friends-attendance-db6a4.firebasestorage.app",
+        messagingSenderId: "328796872836",
+        appId: "1:328796872836:web:df651b626e6070d6f2e2d1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ============================================================
+    // APPLICATION
+    // ============================================================
+    (function() {
+        "use strict";
+
+        const user = JSON.parse(sessionStorage.getItem('attendanceUser'));
+        if (!user) { window.location.href = 'index.html'; return; }
+
+        // ----- DOM refs -----
+        const $ = id => document.getElementById(id);
+        const dashDateLabel = $('dashDateLabel');
+        const sessionLabel = $('sessionLabel');
+        const yesCount = $('yesCount');
+        const noCount = $('noCount');
+        const totalCount = $('totalCount');
+        const activeFriendsCount = $('activeFriendsCount');
+        const voteQuestion = $('voteQuestion');
+        const voteSessionLabel = $('voteSessionLabel');
+        const voteButtons = $('voteButtons');
+        const votedStatus = $('votedStatus');
+        const votedBadge = $('votedBadge');
+        const changeVoteBtn = $('changeVoteBtn');
+        const responsesList = $('responsesList');
+        const responseCount = $('responseCount');
+        const friendsList = $('friendsList');
+        const chatBox = $('chatBox');
+        const chatInput = $('chatInput');
+        const sendChatBtn = $('sendChatBtn');
+        const onlineBadge = $('onlineBadge');
+        const profileBtn = $('profileBtn');
+        const logoutBtn = $('logoutBtn');
+        const profileModal = $('profileModal');
+        const closeProfileModal = $('closeProfileModal');
+        const closeProfileBtn = $('closeProfileBtn');
+        const pName = $('pName');
+        const pId = $('pId');
+        const pPasskey = $('pPasskey');
+        const profileHistory = $('profileHistory');
+
+        let activeListener = null;
+        let chatUnsub = null;
+        let friendsUnsub = null;
+        let onlineUsers = new Set();
+        let allUsersCache = [];
+
+        // ----- DATE HELPERS (IST) -----
+        function getISTDate() {
+            const now = new Date();
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            return new Date(utc + (5.5 * 3600000));
+        }
+
+        function getTodayStr() {
+            const d = getISTDate();
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate())
+                .padStart(2, '0');
+        }
+
+        function getTomorrowStr() {
+            const d = getISTDate();
+            d.setDate(d.getDate() + 1);
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate())
+            .padStart(2, '0');
+        }
+
+        function isBefore11AM() {
+            return getISTDate().getHours() < 11;
+        }
+
+        function formatDateDisplay(dateStr) {
+            const d = new Date(dateStr + 'T00:00:00');
+            return d.toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
+        }
+
+        function getSession() {
+            const today = getTodayStr();
+            const tomorrow = getTomorrowStr();
+            const before11 = isBefore11AM();
+            return before11 ? { votingDocId: today, label: 'Today', isTomorrow: false } : { votingDocId: tomorrow,
+                label: 'Tomorrow', isTomorrow: true };
+        }
+
+        // ----- UPDATE UI helpers -----
+        function updateCounts(responses) {
+            const entries = Object.entries(responses || {});
+            const total = entries.length;
+            let yes = 0,
+                no = 0;
+            entries.forEach(([_, d]) => d.status === 'yes' ? yes++ : no++);
+            yesCount.textContent = yes;
+            noCount.textContent = no;
+            totalCount.textContent = total;
+            responseCount.textContent = total;
+        }
+
+        function updateResponsesList(responses) {
+            const entries = Object.entries(responses || {});
+            if (!entries.length) {
+                responsesList.innerHTML =
+                    '<p class="text-muted text-center" style="padding:8px 0;">No responses yet.</p>';
+                return;
+            }
+            const sorted = entries.sort((a, b) => {
+                if (a[1].status === b[1].status) return a[1].name.localeCompare(b[1].name);
+                return a[1].status === 'yes' ? -1 : 1;
+            });
+            let html = '';
+            sorted.forEach(([_, data]) => {
+                const cls = data.status === 'yes' ? 'coming' : 'not-coming';
+                const txt = data.status === 'yes' ? 'Coming' : 'Not Coming';
+                html += `
+                    <div class="response-item">
+                        <span class="response-name">${data.name}</span>
+                        <span class="response-status ${cls}">${txt}</span>
+                    </div>
+                `;
+            });
+            responsesList.innerHTML = html;
+        }
+
+        function updateVoteUI(responses) {
+            const myVote = responses ? responses[user.studentId] : null;
+            if (myVote) {
+                voteButtons.classList.add('hidden');
+                votedStatus.classList.remove('hidden');
+                const isComing = myVote.status === 'yes';
+                votedBadge.textContent = isComing ? 'Coming' : 'Not Coming';
+                votedBadge.style.borderColor = isComing ? 'var(--green)' : 'var(--red)';
+                votedBadge.style.background = isComing ? 'var(--green-bg)' : 'var(--red-bg)';
+                votedBadge.style.color = isComing ? 'var(--green)' : 'var(--red)';
+                changeVoteBtn.classList.remove('hidden');
+            } else {
+                voteButtons.classList.remove('hidden');
+                votedStatus.classList.add('hidden');
+                changeVoteBtn.classList.add('hidden');
+            }
+        }
+
+        // ----- RENDER DASHBOARD -----
+        function renderDashboard() {
+            if (activeListener) { activeListener();
+                activeListener = null; }
+
+            const session = getSession();
+            const today = getTodayStr();
+            const tomorrow = getTomorrowStr();
+            const before11 = isBefore11AM();
+
+            const todayFormatted = formatDateDisplay(today);
+            const tomorrowFormatted = formatDateDisplay(tomorrow);
+
+            if (before11) {
+                dashDateLabel.textContent = `${todayFormatted} · Voting until 11:00 AM`;
+                sessionLabel.textContent = '● ACTIVE';
+                sessionLabel.className = 'session-tag active';
+                voteQuestion.textContent = 'Will you come today?';
+                voteSessionLabel.textContent = 'Today';
+            } else {
+                dashDateLabel.textContent = `${todayFormatted} (closed) · Voting for ${tomorrowFormatted}`;
+                sessionLabel.textContent = '● VOTING OPEN';
+                sessionLabel.className = 'session-tag upcoming';
+                voteQuestion.textContent = `Will you come tomorrow (${tomorrowFormatted})?`;
+                voteSessionLabel.textContent = 'Tomorrow';
+            }
+
+            const docRef = db.collection('attendance').doc(session.votingDocId);
+            activeListener = docRef.onSnapshot((snap) => {
+                const data = snap.exists ? snap.data() : {};
+                const responses = data.responses || {};
+                updateCounts(responses);
+                updateResponsesList(responses);
+                updateVoteUI(responses);
+            }, (err) => console.warn('Attendance listener error:', err));
+        }
+
+        // ----- SUBMIT VOTE -----
+        async function submitVote(status) {
+            const session = getSession();
+            const docRef = db.collection('attendance').doc(session.votingDocId);
+            try {
+                await db.runTransaction(async (t) => {
+                    const snap = await t.get(docRef);
+                    let responses = snap.exists ? snap.data().responses || {} : {};
+                    responses[user.studentId] = { name: user.name, status: status };
+                    t.set(docRef, { date: session.votingDocId, responses: responses,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+                });
+            } catch (e) { console.error('Vote error:', e);
+                alert('Failed to vote. Check connection.'); }
+        }
+
+        // ----- FRIENDS & ONLINE -----
+        function loadFriendsAndOnline() {
+            if (friendsUnsub) { friendsUnsub(); }
+            friendsUnsub = db.collection('users').onSnapshot((snap) => {
+                const users = [];
+                snap.forEach(d => { const d2 = d.data();
+                    users.push({ id: d.id, ...d2 }); });
+                allUsersCache = users;
+                renderFriends(users);
+            }, (err) => console.warn('Users listener error:', err));
+
+            const presenceRef = db.collection('presence').doc(user.studentId);
+            const updatePresence = () => {
+                presenceRef.set({ uid: user.studentId, name: user.name, lastSeen: firebase.firestore.FieldValue
+                        .serverTimestamp() }, { merge: true });
+            };
+            updatePresence();
+            const interval = setInterval(updatePresence, 30000);
+            window.addEventListener('beforeunload', () => {
+                clearInterval(interval);
+                presenceRef.set({ uid: user.studentId, lastSeen: new Date(0) }, { merge: true });
+            });
+
+            const presenceUnsub = db.collection('presence').onSnapshot((snap) => {
+                const now = Date.now();
+                const twoMin = 120000;
+                const online = new Set();
+                snap.forEach(d => {
+                    const data = d.data();
+                    if (data.lastSeen && data.lastSeen.toMillis) {
+                        const ts = data.lastSeen.toMillis();
+                        if (now - ts < twoMin) online.add(data.uid);
+                    }
+                });
+                onlineUsers = online;
+                onlineBadge.textContent = online.size + ' online';
+                activeFriendsCount.textContent = online.size;
+                renderFriends(allUsersCache);
+            }, (err) => console.warn('Presence listener error:', err));
+
+            const oldUnsub = window._presenceUnsub;
+            if (oldUnsub) oldUnsub();
+            window._presenceUnsub = presenceUnsub;
+        }
+
+        function renderFriends(users) {
+            if (!users.length) {
+                friendsList.innerHTML =
+                    '<div class="text-muted text-center" style="padding:10px 0;">No friends found.</div>';
+                return;
+            }
+            let html = '';
+            const sorted = [...users].sort((a, b) => {
+                const aOnline = onlineUsers.has(a.studentId);
+                const bOnline = onlineUsers.has(b.studentId);
+                if (aOnline && !bOnline) return -1;
+                if (!aOnline && bOnline) return 1;
+                return a.name.localeCompare(b.name);
+            });
+            sorted.forEach(u => {
+                const isOnline = onlineUsers.has(u.studentId);
+                const isYou = u.studentId === user.studentId;
+                const initial = u.name ? u.name.charAt(0).toUpperCase() : '?';
+                html += `
+                    <div class="friend-item">
+                        <div class="friend-info">
+                            <div class="friend-avatar">${initial}</div>
+                            <span class="friend-name">${u.name} ${isYou ? '(You)' : ''}</span>
+                        </div>
+                        <span class="friend-status ${isOnline ? 'online' : 'offline'}">${isOnline ? 'Active' : 'Offline'}</span>
+                    </div>
+                `;
+            });
+            friendsList.innerHTML = html;
+        }
+
+        // ----- CHAT -----
+        function loadChat() {
+            if (chatUnsub) { chatUnsub(); }
+            chatUnsub = db.collection('chat').orderBy('timestamp', 'asc').limit(100).onSnapshot((snap) => {
+                let html = '';
+                if (snap.empty) {
+                    html = '<div class="text-muted text-center" style="padding:20px 0;">No messages yet</div>';
+                } else {
+                    snap.forEach(d => {
+                        const msg = d.data();
+                        const isMe = msg.uid === user.studentId;
+                        const time = msg.timestamp ? msg.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit',
+                                minute: '2-digit' }) : '';
+                        html += `
+                            <div class="chat-msg ${isMe ? 'me' : 'other'}">
+                                <div class="msg-name">${isMe ? 'You' : (msg.name || 'Friend')}</div>
+                                <div class="msg-text">${msg.text || ''}</div>
+                                <div class="msg-time">${time}</div>
+                            </div>
+                        `;
+                    });
+                }
+                chatBox.innerHTML = html;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, (err) => console.warn('Chat listener error:', err));
+        }
+
+        async function sendChatMessage(text) {
+            if (!text.trim()) return;
+            try {
+                await db.collection('chat').add({
+                    uid: user.studentId,
+                    name: user.name,
+                    text: text.trim(),
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                chatInput.value = '';
+            } catch (e) { console.error('Send chat error:', e);
+                alert('Failed to send message.'); }
+        }
+
+        // ----- PROFILE -----
+        function openProfile() {
+            pName.textContent = user.name;
+            pId.textContent = user.studentId;
+            pPasskey.textContent = user.passkey;
+            loadProfileHistory();
+            profileModal.classList.add('open');
+        }
+
+        async function loadProfileHistory() {
+            profileHistory.innerHTML = '<div class="text-muted text-center" style="padding:6px 0;">Loading...</div>';
+            try {
+                const days = [];
+                for (let i = 0; i < 7; i++) {
+                    const d = getISTDate();
+                    d.setDate(d.getDate() - i);
+                    days.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate())
+                        .padStart(2, '0'));
+                }
+                const snapshots = await Promise.all(days.map(date => db.collection('attendance').doc(date).get()));
+                let html = '';
+                snapshots.forEach((snap, idx) => {
+                    const date = days[idx];
+                    const display = formatDateDisplay(date);
+                    const data = snap.exists ? snap.data() : {};
+                    const responses = data.responses || {};
+                    const my = responses[user.studentId];
+                    const status = my ? (my.status === 'yes' ? 'Coming' : 'Not Coming') : '—';
+                    const cls = my ? (my.status === 'yes' ? 'yes' : 'no') : '';
+                    html += `
+                        <div class="h-item">
+                            <span>${display}</span>
+                            <span class="h-status ${cls}">${status}</span>
+                        </div>
+                    `;
+                });
+                profileHistory.innerHTML = html;
+            } catch (e) { console.error('Profile history error:', e);
+                profileHistory.innerHTML = '<div class="text-muted text-center">Failed to load</div>'; }
+        }
+
+        // ----- INIT -----
+        function init() {
+            renderDashboard();
+            loadFriendsAndOnline();
+            loadChat();
+
+            $('voteYesBtn').addEventListener('click', () => submitVote('yes'));
+            $('voteNoBtn').addEventListener('click', () => submitVote('no'));
+            changeVoteBtn.addEventListener('click', () => {
+                voteButtons.classList.remove('hidden');
+                votedStatus.classList.add('hidden');
+                changeVoteBtn.classList.add('hidden');
+            });
+
+            sendChatBtn.addEventListener('click', () => sendChatMessage(chatInput.value));
+            chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendChatMessage(chatInput.value); });
+
+            profileBtn.addEventListener('click', openProfile);
+            closeProfileModal.addEventListener('click', () => profileModal.classList.remove('open'));
+            closeProfileBtn.addEventListener('click', () => profileModal.classList.remove('open'));
+            profileModal.addEventListener('click', (e) => { if (e.target === profileModal) profileModal.classList.remove(
+                    'open'); });
+
+            logoutBtn.addEventListener('click', () => {
+                sessionStorage.removeItem('attendanceUser');
+                window.location.href = 'index.html';
+            });
+
+            scheduleNextRefresh();
+        }
+
+        function scheduleNextRefresh() {
+            const now = getISTDate();
+            const next11 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 11, 0, 0);
+            let ms = next11 - now;
+            if (ms < 0) { const nextDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+                ms = nextDay - now + 11 * 3600000; }
+            if (ms > 1000) {
+                setTimeout(() => { renderDashboard();
+                    scheduleNextRefresh(); }, ms);
+            } else {
+                renderDashboard();
+                scheduleNextRefresh();
+            }
+        }
+
+        init();
+    })();
+</script>
 </body>
 </html>
